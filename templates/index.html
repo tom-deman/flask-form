@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        >
+        <title>
+            Home Page
+        </title>
+        <link
+            href="../static/tailwind.css"
+            rel="stylesheet"
+        >
+    </head>
+    <body class="bg-gray-100 min-h-screen flex items-center justify-center">
+        <div class="max-w-md w-full bg-white p-6 rounded-lg shadow-md text-center">
+            <h1 class="text-3xl font-bold mb-4">
+                Welcome to Hackers Poulette™
+            </h1>
+            <p class="text-gray-700 mb-6">
+                Your source for DIY kits and accessories for Raspberry Pi.
+            </p>
+            <a
+                href="{{ url_for('contact') }}"
+                class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700"
+            >
+                Contact Us
+            </a>
+        </div>
+    </body>
+</html>
