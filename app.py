@@ -30,7 +30,7 @@ def contact():
     return render_template(
         'contact_form.html',
         countries = countries,
-        errors = {}
+        errors    = {}
     )
 
 @app.route( '/submit', methods = [ 'POST' ] )
