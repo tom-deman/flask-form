@@ -107,7 +107,7 @@ def submit_form():
                 VALUES (%s, %s, %s, %s, %s, %s, %s)
             """
             cursor.execute( insert_query, ( first_name, last_name, email, country, message, gender, subject ) )
-            
+
             connection.commit()
             cursor.close()
             connection.close()
@@ -122,11 +122,11 @@ def submit_form():
                 gender     = gender,
                 subject    = subject
             )
-        
+
         except mysql.connector.Error as err:
             print( f"Error: { err }" )
             return render_template( 'error.html' )
-    
+
     return "Error submitting the form. Please try again later."
 
 

@@ -24,7 +24,6 @@ First name & last name + email + country (list) + message + gender (M/F) (Radio 
 I did build three HTML pages: the home page, the contact form page, and the confirmation page when the form is successfully sent. I used Tailwind CSS for the style.
 
 <br/>
-<br/>
 
 ![alt text](assets/site1.png)
 
@@ -82,3 +81,34 @@ Now you can see my HTML pages. (notice the honeypot field at the end and the tem
 <br/>
 
 ![alt text](assets/code7.png)
+
+## SQL
+
+Now we will add some code to store the forms results into an SQL database.
+
+Here are the new imports to allow us to use sql with Python.
+I stored the credentials into a hidden .env file and we call them with Python dotenv librabry.
+
+![alt text](assets/code10.png)
+
+<br/>
+
+I created another file to setup the database to make it more readable.
+
+![alt text](assets/code9.png)
+
+<br/>
+
+At the end of the submit function we add the SQL statements to store data into the database and we handle the errors.
+
+![alt text](assets/code11.png)
+
+<br/>
+
+And lastly, here's my html page to show the error message if we encouter a database error and the html code.
+
+![alt text](assets/site6.png)
+
+<br/>
+
+![alt text](assets/code8.png)
