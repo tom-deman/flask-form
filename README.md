@@ -87,7 +87,7 @@ Now you can see my HTML pages. (notice the honeypot field at the end and the tem
 Now we will add some code to store the forms results into an SQL database.
 
 Here are the new imports to allow us to use sql with Python.
-I stored the credentials into a hidden .env file and we call them with Python dotenv librabry.
+I stored the credentials into a hidden .env file and we call them with Python dotenv librabry ( Don't forget to put your credentials in the .env file ).
 
 ![alt text](assets/code10.png)
 
@@ -112,3 +112,16 @@ And lastly, here's my html page to show the error message if we encouter a datab
 <br/>
 
 ![alt text](assets/code8.png)
+
+## Nosql
+
+Here are the small code change to handle a Nosql database with MongoDB
+We import the mongodb module and set a simple condition to choose between SQL or no sql database.
+
+![alt text](assets/code12.png)
+
+<br/>
+
+And here we also use the if condition and use the nosql syntax to store in the nosql database.
+
+![alt text](assets/code13.png)
