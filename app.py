@@ -1,20 +1,30 @@
 from flask          import Flask, render_template, request, redirect, url_for
 from dotenv         import load_dotenv
 from database_setup import create_database
+from pymongo        import MongoClient
 import bleach
 import re
 import os
 import mysql.connector
 
 
+database = "Nosql"
+
 load_dotenv()
 
-MYSQL_HOST     = os.getenv( 'MYSQL_HOST'     )
-MYSQL_USER     = os.getenv( 'MYSQL_USER'     )
-MYSQL_PASSWORD = os.getenv( 'MYSQL_PASSWORD' )
-MYSQL_DB       = os.getenv( 'MYSQL_DB'       )
+if( database == "SQL" ):
+    MYSQL_HOST     = os.getenv( 'MYSQL_HOST'     )
+    MYSQL_USER     = os.getenv( 'MYSQL_USER'     )
+    MYSQL_PASSWORD = os.getenv( 'MYSQL_PASSWORD' )
+    MYSQL_DB       = os.getenv( 'MYSQL_DB'       )
 
-create_database()
+    create_database()
+
+else:
+    MONGO_URI = os.getenv('MONGO_URI')
+    MONGO_DB  = os.getenv('MONGO_DB')
+    client    = MongoClient(MONGO_URI)
+    db        = client[MONGO_DB]
 
 
 app = Flask( __name__ )
@@ -93,41 +103,68 @@ def submit_form():
                 subject    = subject
             )
 
-        try:
-            connection = mysql.connector.connect(
-                host     = MYSQL_HOST,
-                user     = MYSQL_USER,
-                password = MYSQL_PASSWORD,
-                database = MYSQL_DB
-            )
-            cursor = connection.cursor()
+        if( database == "SQL" ):
+            try:
+                connection = mysql.connector.connect(
+                    host     = MYSQL_HOST,
+                    user     = MYSQL_USER,
+                    password = MYSQL_PASSWORD,
+                    database = MYSQL_DB
+                )
+                cursor = connection.cursor()
 
-            insert_query = """
-                INSERT INTO forms (first_name, last_name, email, country, message, gender, subject)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
-            """
-            cursor.execute( insert_query, ( first_name, last_name, email, country, message, gender, subject ) )
+                insert_query = """
+                    INSERT INTO forms (first_name, last_name, email, country, message, gender, subject)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                """
+                cursor.execute( insert_query, ( first_name, last_name, email, country, message, gender, subject ) )
 
-            connection.commit()
-            cursor.close()
-            connection.close()
+                connection.commit()
+                cursor.close()
+                connection.close()
 
-            return render_template(
-                'thank_you.html',
-                first_name = first_name,
-                last_name  = last_name,
-                email      = email,
-                country    = country,
-                message    = message,
-                gender     = gender,
-                subject    = subject
-            )
+                return render_template(
+                    'thank_you.html',
+                    first_name = first_name,
+                    last_name  = last_name,
+                    email      = email,
+                    country    = country,
+                    message    = message,
+                    gender     = gender,
+                    subject    = subject
+                )
 
-        except mysql.connector.Error as err:
-            print( f"Error: { err }" )
-            return render_template( 'error.html' )
+            except mysql.connector.Error as err:
+                print( f"Error: { err }" )
+                return render_template( 'error.html' )
 
-    return "Error submitting the form. Please try again later."
+        else:
+            try:
+                form_data = {
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "email": email,
+                    "country": country,
+                    "message": message,
+                    "gender": gender,
+                    "subject": subject
+                }
+                db.forms.insert_one(form_data)
+
+                return render_template(
+                    'thank_you.html',
+                    first_name = first_name,
+                    last_name  = last_name,
+                    email      = email,
+                    country    = country,
+                    message    = message,
+                    gender     = gender,
+                    subject    = subject
+                )
+
+            except errors.PyMongoError as err:
+                print(f"MongoDB Error: {err}")
+                return render_template('error.html')
 
 
 if __name__ == '__main__':
